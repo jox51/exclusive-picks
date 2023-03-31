@@ -15,8 +15,7 @@ const RegisterModal = () => {
   }
 
   const handleRegister = () => {
-    console.log(value)
-    dispatch(registerUser(value))
+     dispatch(registerUser(value))
   }
   return (
     <>

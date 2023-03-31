@@ -5,6 +5,7 @@ import DataTable from "../components/DataTable"
 import Footer from "../components/Footer"
 import AccessAlert from "../components/AccessAlert"
 import { useSelector } from "react-redux"
+import DataTableAlt from "../components/DataTableAlt"
 
 const Landing = () => {
   const { loginResp } = useSelector((store) => store.edges)
@@ -13,6 +14,7 @@ const Landing = () => {
       <Hero />
       <Info />
       {loginResp.msg === "login success" ? <DataTable /> : <AccessAlert />}
+      <DataTableAlt />
       <Footer />
     </section>
   )

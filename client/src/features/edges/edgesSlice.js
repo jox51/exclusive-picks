@@ -16,7 +16,7 @@ const REG_URL = import.meta.env.VITE_REG_URL
 const urlBasketballPostTotalStandings =
   "/basketball/tournament/132/season/45096/standings/total"
 const urlBaseballPostTotalStandings =
-  "/baseball/tournament/11205/season/46674/standings/total"
+  "/baseball/tournament/11205/season/47941/standings/total"
 // let urlBaseballPlayerDetails = `/baseball/team/${teamId}/players`
 //current season, 47941
 // last season, 46774
@@ -28,6 +28,7 @@ const initialState = {
   baseballStatsLoading: false,
   playerDetailsLoading: false,
   basketballPicksLoading: false,
+  baseballStatsLoaded: false,
   sportsStats: [],
   formattedData: [],
   arePicksFiltered: false,
@@ -47,8 +48,8 @@ export const getStats = createAsyncThunk(
     // const { loginResp } = thunkAPI.getState().arbs
     let config = {
       headers: {
-        "X-RapidAPI-Key": "1240f4bf06msh22e9d539d535101p1b1ff3jsn337bd1967b6d",
-        "X-RapidAPI-Host": "allsportsapi2.p.rapidapi.com"
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": API_HOST
       }
     }
 
@@ -70,8 +71,8 @@ export const getBaseballStats = createAsyncThunk(
     // const { loginResp } = thunkAPI.getState().arbs
     let config = {
       headers: {
-        "X-RapidAPI-Key": "1240f4bf06msh22e9d539d535101p1b1ff3jsn337bd1967b6d",
-        "X-RapidAPI-Host": "allsportsapi2.p.rapidapi.com"
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": API_HOST
       }
     }
 
@@ -94,8 +95,8 @@ export const getPlayerDetails = createAsyncThunk(
       thunkAPI.getState().edges
     let config = {
       headers: {
-        "X-RapidAPI-Key": "1240f4bf06msh22e9d539d535101p1b1ff3jsn337bd1967b6d",
-        "X-RapidAPI-Host": "allsportsapi2.p.rapidapi.com"
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": API_HOST
       }
     }
 
@@ -183,6 +184,7 @@ const edgesSlice = createSlice({
         state.loading = false
         state.arePicksFiltered = false
         state.basketballPicksLoading = false
+        state.baseballStatsLoaded = false
 
         state.eYearPlayerFilter = false
         state.sportsStats = payload
@@ -201,6 +203,7 @@ const edgesSlice = createSlice({
         state.baseballStatsLoading = false
         state.arePicksFiltered = false
         state.eYearPlayerFilter = false
+        state.baseballStatsLoaded = true
         state.sportsStats = payload
         state.formattedData = eastFunc(payload, baseball)
         state.baseballTeamIds = baseballDataRestruc(payload)
@@ -215,6 +218,7 @@ const edgesSlice = createSlice({
       .addCase(getPlayerDetails.fulfilled, (state, { payload }) => {
         state.loading = false
         state.playerDetailsLoading = false
+        state.baseballStatsLoaded = true
         state.playerDetails = payload.playerRelevInfo
         state.eYearFormatData = payload.eYearMatchedPlayer
         state.eYearPlayerFilter = true

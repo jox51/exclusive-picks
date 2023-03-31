@@ -9,14 +9,7 @@ const Info = () => {
         const { card } = item
         const { title, description } = card
 
-        return (
-          <Card
-            key={index}
-            id="#features"
-            title={title}
-            description={description}
-          />
-        )
+        return <Card key={index} title={title} description={description} />
       })}
     </section>
   )

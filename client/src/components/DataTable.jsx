@@ -41,30 +41,34 @@ const DataTable = () => {
     eYearPlayerFilter,
     baseballStatsLoading,
     playerDetailsLoading,
-    basketballPicksLoading
+    basketballPicksLoading,
+    baseballStatsLoaded
   } = useSelector((store) => store.edges)
+  const customTheme = {
+    Table: `
+        --data-table-library_grid-template-columns:  1fr 1fr 1fr 1fr 1fr 1fr 1fr 250px;
+   `,
+    BaseCell: `
+        &:not(:last-of-type) {
+          border-right: 1px solid #a0a8ae;
+        }
 
-  // const theme = useTheme([
-  //   getTheme(),
-  //   {
-  //     HeaderRow: `
-  //       background-color: #eaf5fd;
-  //     `,
-  //     Row: `
-  //       &:nth-of-type(odd) {
-  //         background-color: #d2e9fb;
-  //       }
+        text-align: center;
 
-  //       &:nth-of-type(even) {
-  //         background-color: #eaf5fd;
-  //       }
-  //     `,
-  //     Table: ``
-  //   }
-  // ])
+        &:first-of-type {
+          text-align: left;
+        }
+
+        &:last-of-type {
+          text-align: left;
+          left: 250px;
+          word-wrap: normal;
+        }
+      `
+  }
 
   const chakraTheme = getTheme(DEFAULT_OPTIONS)
-  const theme = useTheme(chakraTheme)
+  const theme = useTheme([chakraTheme, customTheme])
 
   let nodes
   if (arePicksFiltered) {
@@ -73,26 +77,6 @@ const DataTable = () => {
     nodes = eYearFormatData
   } else nodes = formattedData
 
-  // const COLUMNS = [
-  //   { label: "Team", renderCell: (item) => item.teamName },
-  //   {
-  //     label: "Wins",
-  //     renderCell: (item) => item.wins
-  //   },
-  //   { label: "Losses", renderCell: (item) => item.losses },
-
-  //   { label: "Streak", renderCell: (item) => item.streak },
-  //   { label: "Position", renderCell: (item) => item.position },
-  //   { label: "Conference", renderCell: (item) => item.conference },
-  //   { label: "CurrWinNum", renderCell: (item) => item.currWinNum },
-  //   { label: "CurrLossNum", renderCell: (item) => item.currLossNum },
-  //   {
-  //     label: "Enemy Year Player",
-  //     renderCell: eYearPlayerFilter
-  //       ? (item) => item.filterEYearByTeam[0].isRooster
-  //       : ""
-  //   }
-  // ]
   const data = { nodes }
   const resize = { resizerHighlight: "#dde2eb", resizerWidth: 25 }
 
@@ -128,6 +112,10 @@ const DataTable = () => {
     dispatch(getPlayerDetails())
   }
 
+  const getCellStyle = () => ({
+    style: { height: `70px` }
+  })
+
   return (
     <section>
       <div className="divider"></div>
@@ -146,12 +134,12 @@ const DataTable = () => {
           {playerDetailsLoading ? <Loading /> : "Filter E-Year Pitchers"}
         </button>
       </div>
-      <div className="flex justify-center mx-auto max-w-6xl py-2">
+      <div className="flex justify-center mx-auto min-w-full max-w-6xl py-2">
         <Box p={3} borderWidth="1px" borderRadius="lg">
           <Table
             data={data}
             theme={theme}
-            layout={{ horizontalScroll: true }}
+            layout={{ custom: true, horizontalScroll: true }}
             pagination={pagination}
           >
             {(tableList) => (
@@ -161,7 +149,9 @@ const DataTable = () => {
                     <HeaderCell resize={resize}>Team</HeaderCell>
                     <HeaderCell resize={resize}>Wins</HeaderCell>
                     <HeaderCell resize={resize}>Losses</HeaderCell>
-                    <HeaderCell resize={resize}>Streak</HeaderCell>
+                    {!baseballStatsLoaded && (
+                      <HeaderCell resize={resize}>Streak</HeaderCell>
+                    )}
                     <HeaderCell resize={resize}>Position</HeaderCell>
                     <HeaderCell resize={resize}>Conference</HeaderCell>
                     <HeaderCell resize={resize}>Win Num</HeaderCell>
@@ -180,16 +170,18 @@ const DataTable = () => {
                       <Cell>{item.teamName}</Cell>
                       <Cell>{item.wins}</Cell>
                       <Cell>{item.losses}</Cell>
-                      <Cell>{item.streak}</Cell>
+                      {!baseballStatsLoaded && <Cell>{item.streak}</Cell>}
                       <Cell>{item.position}</Cell>
                       <Cell>{item.conference}</Cell>
                       <Cell>{item.currWinNum}</Cell>
                       <Cell>{item.currLossNum}</Cell>
                       {eYearPlayerFilter && (
-                        <Cell>
+                        <Cell {...getCellStyle()}>
                           {item.filterEYearByTeam?.map((player, index) => {
                             const { playerName } = player
-                            return `${playerName}, `
+                            return item.filterEYearByTeam.length - 1 === index
+                              ? `${playerName}`
+                              : `${playerName}, `
                           })}
                         </Cell>
                       )}
