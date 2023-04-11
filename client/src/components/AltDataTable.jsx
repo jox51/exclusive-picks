@@ -165,6 +165,25 @@ const AltDataTable = () => {
     //end
   )
 
+  const statsHandler = () => {
+    dispatch(getStats())
+  }
+  const baseballStatsHandler = () => {
+    dispatch(getBaseballStats())
+  }
+  const filteredHandler = () => {
+    eYearPlayerFilter
+      ? dispatch(filterPicks(eYearFormatData))
+      : dispatch(filterPicks(formattedData))
+  }
+  const pitchersHandler = () => {
+    dispatch(getPlayerDetails())
+  }
+
+  const getCellStyle = () => ({
+    style: { height: `70px` }
+  })
+
   return (
     <section>
       <div className="divider"></div>
