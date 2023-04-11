@@ -2,6 +2,7 @@ import React from "react"
 import Hero from "../components/Hero"
 import Info from "../components/Info"
 import DataTable from "../components/DataTable"
+import AltDataTable from "../components/AltDataTable"
 import Footer from "../components/Footer"
 import AccessAlert from "../components/AccessAlert"
 import { useSelector } from "react-redux"
@@ -12,7 +13,7 @@ const Landing = () => {
     <section>
       <Hero />
       <Info />
-      {loginResp.msg === "login success" ? <DataTable /> : <AccessAlert />}
+      {loginResp.msg === "login success" ? <AltDataTable /> : <AccessAlert />}
 
       <Footer />
     </section>

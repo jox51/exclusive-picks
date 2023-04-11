@@ -12,11 +12,13 @@ const rawDay = getDate(now)
 const dayDigits = ("" + rawDay).split("")
 
 export let sumDay = 0
-if (rawDay !== 11 || rawDay !== 22) {
+if (rawDay === 11 || rawDay === 22) {
+  sumDay = rawDay
+} else if (rawDay !== 11 || rawDay !== 22) {
   for (let i = 0; i < dayDigits.length; i++) {
     sumDay = sumDay + parseInt(dayDigits[i], 10)
   }
-} else sumDay = rawDay
+}
 
 // gets year
 const rawYear = getYear(now)
