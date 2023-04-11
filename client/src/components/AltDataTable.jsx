@@ -166,13 +166,31 @@ const AltDataTable = () => {
   )
 
   return (
-    <div className="flex justify-center mx-auto m-2 overflow-auto">
-      {!baseballStatsLoaded ? (
-        <MantineReactTable columns={columnsMain} data={data} />
-      ) : (
-        <MantineReactTable columns={columnsAlt} data={data} />
-      )}
-    </div>
+    <section>
+      <div className="divider"></div>
+      <div className="max-w-full flex justify-center gap-2 ">
+        <button className="btn btn-info" onClick={statsHandler}>
+          {basketballPicksLoading ? <Loading /> : "Get Basketball Picks"}
+        </button>
+        <button className="btn btn-info" onClick={baseballStatsHandler}>
+          {baseballStatsLoading ? <Loading /> : "Get Baseball Picks"}
+        </button>
+        <button className="btn btn-info" onClick={filteredHandler}>
+          Filter Picks
+        </button>
+
+        <button className="btn btn-info" onClick={pitchersHandler}>
+          {playerDetailsLoading ? <Loading /> : "Filter E-Year Pitchers"}
+        </button>
+      </div>
+      <div className="flex justify-center mx-auto m-2 overflow-auto">
+        {!baseballStatsLoaded ? (
+          <MantineReactTable columns={columnsMain} data={data} />
+        ) : (
+          <MantineReactTable columns={columnsAlt} data={data} />
+        )}
+      </div>
+    </section>
   )
 }
 
